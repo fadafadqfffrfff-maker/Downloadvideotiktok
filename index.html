@@ -22,12 +22,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Mulai dari atas biar pas di layar pendek */
+            justify-content: flex-start;
         }
 
         .container {
             width: 100%;
-            max-width: 420px; /* Ukuran standar maksimal layar HP */
+            max-width: 420px;
             background-color: rgba(255, 255, 255, 0.06);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -78,7 +78,7 @@
             background-color: rgba(0, 0, 0, 0.5);
             border: 1px solid #4b5563;
             border-radius: 12px;
-            padding: 14px 40px 14px 14px; /* Space kanan untuk tombol X */
+            padding: 14px 40px 14px 14px;
             color: #ffffff;
             font-size: 14px;
             outline: none;
@@ -230,6 +230,7 @@
         }
 
         .btn-hd { background-color: #0891b2; }
+        .btn-normal { background-color: #059669; } /* Warna hijau untuk membedakan */
         .btn-wm { background-color: #374151; }
         .btn-mp3 { background-color: #9333ea; }
 
@@ -291,8 +292,11 @@
 
             <!-- Tombol Download -->
             <div class="download-links">
-                <a id="btnNoWatermark" href="#" target="_blank" class="download-btn btn-hd">
-                    <i class="fas fa-video"></i> HD Tanpa Watermark
+                <a id="btnNoWatermarkHD" href="#" target="_blank" class="download-btn btn-hd">
+                    <i class="fas fa-video"></i> Tanpa Watermark (HD)
+                </a>
+                <a id="btnNoWatermarkNormal" href="#" target="_blank" class="download-btn btn-normal">
+                    <i class="fas fa-video"></i> Tanpa Watermark (Normal)
                 </a>
                 <a id="btnWithWatermark" href="#" target="_blank" class="download-btn btn-wm">
                     <i class="fas fa-film"></i> Dengan Watermark
@@ -304,7 +308,7 @@
         </div>
     </div>
 
-    <p class="footer">&copy; By Lyy loh ya :v</p>
+    <p class="footer">&copy; 2026 Powered by TikWM API</p>
 
     <!-- Logika JavaScript -->
     <script>
@@ -318,7 +322,8 @@
         const authorAvatar = document.getElementById('authorAvatar');
         const authorName = document.getElementById('authorName');
         const videoTitle = document.getElementById('videoTitle');
-        const btnNoWatermark = document.getElementById('btnNoWatermark');
+        const btnNoWatermarkHD = document.getElementById('btnNoWatermarkHD');
+        const btnNoWatermarkNormal = document.getElementById('btnNoWatermarkNormal');
         const btnWithWatermark = document.getElementById('btnWithWatermark');
         const btnAudio = document.getElementById('btnAudio');
 
@@ -351,7 +356,7 @@
                     },
                     body: new URLSearchParams({
                         'url': urlInput,
-                        'hd': '1'
+                        'hd': '1' // Minta data HD sekalian dari server
                     })
                 });
 
@@ -364,8 +369,9 @@
                     authorName.innerText = `@${videoData.author.unique_id}`;
                     videoTitle.innerText = videoData.title || 'Tidak ada caption';
 
-                    // Set tautan langsung agar browser HP bisa langsung membuka/mengunduh
-                    btnNoWatermark.href = videoData.hdplay || videoData.play;
+                    // Set tautan unduhan masing-masing tombol
+                    btnNoWatermarkHD.href = videoData.hdplay || videoData.play; // Cari versi HD, kalau gak ada balik ke biasa
+                    btnNoWatermarkNormal.href = videoData.play; // Murni resolusi bawaan/normal tanpa HD
                     btnWithWatermark.href = videoData.wmplay;
                     btnAudio.href = videoData.music;
 
